@@ -21,16 +21,23 @@ const counterSlice = createSlice({
       ];
     },
 
-    deletTodo:(state ,{payload})=>{
+    deletTodo: (state, { payload }) => {
+      state.todos = state.todos.filter((item) => item.id !== payload);
+    },
 
-      state.todos=state.todos.filter(item=>item.id !== payload)
+    editTodo: (state, { payload }) => {
+      console.log(payload);
 
-    }
-    
+      const a = state.todos.find((i) => i.id === payload.id);
+      if (a) {
+        a.name = payload.name;
+      }
+    },
   },
 });
 
-export const { qoshish, ozgartir, addTodo,deletTodo } = counterSlice.actions;
+export const { qoshish, ozgartir, addTodo, deletTodo, editTodo } =
+  counterSlice.actions;
 
 export const store = configureStore({
   reducer: { counter: counterSlice.reducer },

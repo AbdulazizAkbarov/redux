@@ -1,12 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
-import { RootState, addTodo, deletTodo } from "./Store";
+import { RootState, addTodo, deletTodo, editTodo } from "./Store";
 import { useState } from "react";
-import { Form, Button } from "antd";
+import { Form, Button, Drawer } from "antd";
 import Input from "antd/es/input/Input";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import EditDrawer from "./EditDrawer";
 
 function Counter() {
+  const [inputValue, setInputValue] = useState("");
+  const [edit, setEdit] = useState<{
+    name: string;
+    id: number;
+  }>();
+
   const todos = useSelector((state: RootState) => {
     return state.counter.todos;
   });
@@ -15,18 +22,34 @@ function Counter() {
     dispatch(deletTodo(id));
   };
 
+  const Search = todos.filter((item) => {
+    return item.name
+      .toLocaleLowerCase()
+      .includes(inputValue.toLocaleLowerCase());
+  });
+
   const dispatch = useDispatch();
-  const [inputValue, setInputValue] = useState("");
 
   return (
     <div className="bg-[#253E55] w-[400px] mx-auto rounded-xl p-4 text-white">
       <Form style={{ display: "flex", gap: "10px" }}>
         <Form.Item style={{ color: "white" }}>
           <Input
+          
             style={{
-              width: "265px",
+              width: "150px",
             }}
+            
             placeholder="User Qo'shish"
+            
+          />
+        </Form.Item>
+        <Form.Item style={{ color: "white" }}>
+          <Input
+            style={{
+              width: "100px",
+            }}
+            placeholder="Qidirish"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
@@ -44,7 +67,7 @@ function Counter() {
       </Form>
 
       <div>
-        {todos.map((item, i) => {
+        {Search.map((item, i) => {
           return (
             <div
               className="my-2 text-xl border rounded text-start pl-3 flex justify-between items-center p-2"
@@ -52,7 +75,11 @@ function Counter() {
             >
               {i + 1}. {item.name}
               <div className="flex gap-2">
-                <Button>
+                <Button
+                  onClick={() => {
+                    setEdit(item);
+                  }}
+                >
                   <EditOutlined />
                 </Button>
                 <Button danger onClick={() => delet(item.id)}>
@@ -63,6 +90,12 @@ function Counter() {
           );
         })}
       </div>
+      <EditDrawer
+        edit={edit}
+        onClose={() => {
+          setEdit(undefined);
+        }}
+      />
     </div>
   );
 }
