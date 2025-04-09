@@ -1,6 +1,6 @@
 import { Button, Drawer, Form, Input } from "antd";
 import { useDispatch } from "react-redux";
-import { editTodo } from "./Store";
+import { editTodo } from "./CounterSlice";
 
 function EditDrawer({ edit, onClose }: { edit: any; onClose: () => void }) {
   const dispatch = useDispatch();

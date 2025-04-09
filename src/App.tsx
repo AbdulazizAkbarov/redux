@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
-import { RootState, addTodo, deletTodo, editTodo } from "./Store";
 import { useState } from "react";
-import { Form, Button, Drawer } from "antd";
+import { Form, Button } from "antd";
 import Input from "antd/es/input/Input";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import EditDrawer from "./EditDrawer";
+import { addTodo, deletTodo } from "./CounterSlice";
+import { RootState } from "./redux.types";
 
 function Counter() {
   const [inputValue, setInputValue] = useState("");
@@ -32,39 +33,43 @@ function Counter() {
 
   return (
     <div className="bg-[#253E55] w-[400px] mx-auto rounded-xl p-4 text-white">
-      <Form style={{ display: "flex", gap: "10px" }}>
-        <Form.Item style={{ color: "white" }}>
+      <Form
+        style={{ display: "flex", gap: "10px" }}
+        onFinish={(values) => {
+          console.log(values);
+          dispatch(addTodo(values));
+        }}
+      >
+        <Form.Item
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: "Iltimos, foydalanuvchi nomini kiriting",
+            },
+          ]}
+        >
           <Input
-          
             style={{
               width: "150px",
             }}
-            
             placeholder="User Qo'shish"
-            
           />
         </Form.Item>
-        <Form.Item style={{ color: "white" }}>
-          <Input
-            style={{
-              width: "100px",
-            }}
-            placeholder="Qidirish"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-        </Form.Item>
-        <Button
-          htmlType="submit"
-          type="primary"
-          onClick={() => {
-            dispatch(addTodo(inputValue));
-            setInputValue("");
-          }}
-        >
+
+        <Button htmlType="submit" type="primary">
           Add User
         </Button>
       </Form>
+
+      <Input
+        style={{
+          width: "100px",
+        }}
+        placeholder="Qidirish"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+      />
 
       <div>
         {Search.map((item, i) => {
