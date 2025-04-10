@@ -33,7 +33,17 @@ function Counter() {
 
   return (
     <div className="bg-[#253E55] w-[400px] mx-auto rounded-xl p-4 text-white">
-      <Form
+     <div className="flex gap-3" >
+     <Input
+        style={{
+          width: "100px",
+          height:"33px"
+        }}
+        placeholder="Qidirish"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+      />
+     <Form
         style={{ display: "flex", gap: "10px" }}
         onFinish={(values) => {
           console.log(values);
@@ -62,15 +72,9 @@ function Counter() {
         </Button>
       </Form>
 
-      <Input
-        style={{
-          width: "100px",
-        }}
-        placeholder="Qidirish"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-      />
+   
 
+     </div>
       <div>
         {Search.map((item, i) => {
           return (
